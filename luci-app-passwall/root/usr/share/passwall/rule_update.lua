@@ -166,7 +166,7 @@ local function check_excluded_domain(value)
 	return false
 end
 
--- 替代 string.find Find "^[#!\\[@]+"
+-- substitute string.find Find "^[#!\\[@]+"
 local function is_comment_line(s)
 	if not s or s == "" then return false end
 	local b = s:byte(1)
@@ -245,7 +245,7 @@ local function is_ipv6(s, check_cidr)
 			-- deal with "/" previous paragraph
 			if seg_len > 0 then segs = segs + 1 end
 			if (not saw_dc and segs ~= 8) or (saw_dc and segs > 8) then return false end
-			-- 解析掩码
+			-- parse mask
 			i = i + 1
 			if i > len then return false end
 			local mask = 0
@@ -259,7 +259,7 @@ local function is_ipv6(s, check_cidr)
 			-- CIDR Parsed successfully
 			return true
 		end
-		-- Colon handling（: 或 ::）
+		-- Colon handling（: or ::）
 		if b == 58 then
 			local nextb = (i+1 <= len) and s:byte(i+1) or 0
 			-- "::"
@@ -277,7 +277,7 @@ local function is_ipv6(s, check_cidr)
 				i = i + 1
 			end
 		else
-			-- hex 数字
+			-- hex number
 			local is_hex =
 				(b >= 48 and b <= 57) or   -- 0-9
 				(b >= 65 and b <= 70) or   -- A-F
@@ -316,7 +316,7 @@ local function extract_domain(s)
 	local last_dot = nil
 	for i = 1, len do
 		local b = s:byte(i)
-		-- 允许的域名字符：a-zA-Z0-9.- 
+		-- Allowed domain name characters：a-zA-Z0-9.- 
 		if (b >= 48 and b <= 57) or (b >= 65 and b <= 90) or (b >= 97 and b <= 122) or b == 45 or b == 46 then
 			if not start then start = i end
 			if b == 46 then last_dot = i end
@@ -425,7 +425,7 @@ local function fetch_rule(rule_name, rule_type, url, exclude_domain, max_retries
 					break
 				end
 				os.remove(current_file)
-				log(string.format("%s No.%d条规则下载失败 (HTTP:%s)，In progress%dattempts...", rule_name, k, tostring(http_code), i))
+				log(string.format("%s No.%dRule download failed (HTTP:%s)，In progress%dattempts...", rule_name, k, tostring(http_code), i))
 			end
 		else
 			if not GeoToRule(rule_name, rule_type, current_file) then return 1 end
@@ -485,7 +485,7 @@ local function fetch_rule(rule_name, rule_type, url, exclude_domain, max_retries
 			end
 		else
 			sret = 1
-			log(string.format("%s 第%drules: %s Download failed！", rule_name, k, v))
+			log(string.format("%s No.%drules: %s Download failed！", rule_name, k, v))
 		end
 		os.remove(current_file)
 	end
@@ -580,7 +580,7 @@ local function fetch_geofile(geo_name, geo_type, url)
 				sys.call(string.format("mkdir -p %s && mv -f %s %s", backup_path, asset_path, backup_path))
 				sys.call(string.format("mkdir -p %s && mv -f %s %s", asset_location, tmp_path, asset_path))
 				reboot = 1
-				log(geo_type .. " 更新成功。")
+				log(geo_type .. " Update successful。")
 				if geo_type == "geoip" then
 					geoip_update_ok = true
 				else

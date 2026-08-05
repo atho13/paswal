@@ -101,7 +101,7 @@ test_auto_switch() {
 		[ $? -eq 0 ] && {
 			check_process
 			#Master node is normal，Switch to master node
-			echolog "SocksSwitch detection：port[${socks_port}] 主节点【$(config_n_get $main_node type)：[$(config_n_get $main_node remarks)]】normal，Switch to master node！"
+			echolog "SocksSwitch detection：port[${socks_port}] master node【$(config_n_get $main_node type)：[$(config_n_get $main_node remarks)]】normal，Switch to master node！"
 			NO_REC_PROCESS=1 $APP_FILE socks_node_switch flag=${id} new_node=${main_node}
 			[ $? -eq 0 ] && {
 				echolog "SocksSwitch detection：port[${socks_port}] Node switching completed！"
@@ -123,19 +123,19 @@ test_auto_switch() {
 				[ "$found" = "1" ] && { new_node="$node"; break; } # After finding the current node, remove the next one
 				[ "$node" = "$now_node" ] && found=1             # Mark the current node found
 			done
-			# 如果没找到当前节点，或者当前节点是最后一个，Just take the first node
+			# If the current node is not found，Or the current node is the last one，Just take the first node
 			[ -z "$new_node" ] && new_node="$first_node"
 			if [ "$new_node" = "$main_node" ]; then
 				msg="切换到主节点检测！"
 			else
-				msg="switch to$([ "$now_node" = "$main_node" ] && echo Standby node || echo 下一个备用节点)Detection！"
+				msg="switch to$([ "$now_node" = "$main_node" ] && echo Standby node || echo next standby node)Detection！"
 			fi
 		else
 			# When there is only one backup node，Polling with the master node
 			new_node=$([ "$now_node" = "$main_node" ] && echo "$b_nodes" || echo "$main_node")
-			msg="switch to$([ "$now_node" = "$main_node" ] && echo 备用节点 || echo master node)Detection！"
+			msg="switch to$([ "$now_node" = "$main_node" ] && echo Standby node || echo master node)Detection！"
 		fi
-		echolog "SocksSwitch detection：port[${socks_port}]【$(config_n_get $now_node type)：[$(config_n_get $now_node remarks)]】异常，$msg"
+		echolog "SocksSwitch detection：port[${socks_port}]【$(config_n_get $now_node type)：[$(config_n_get $now_node remarks)]】abnormal，$msg"
 		test_node ${new_node}
 		if [ $? -eq 0 ]; then
 			check_process
@@ -166,7 +166,7 @@ start() {
 	backup_node=$(lua_api "get_socks_backup_nodes(\"${id}\")")
 	if [ -n "$backup_node" ]; then
 		backup_node_num=$(printf "%s\n" "$backup_node" | wc -w)
-		echolog "  - SocksSwitch detection：端口[${socks_port}] Number of backup nodes：${backup_node_num}"
+		echolog "  - SocksSwitch detection：port[${socks_port}] Number of backup nodes：${backup_node_num}"
 		if [ "$backup_node_num" -eq 1 ]; then
 			[ "$main_node" = "$backup_node" ] && return
 		elif [ "$backup_node_num" -gt 1 ]; then

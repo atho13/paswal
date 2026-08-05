@@ -132,7 +132,7 @@ for k, e in ipairs(api.get_valid_nodes()) do
 	end
 end
 
--- 获取各项动态配置的当前服务器，可以用 get and set， getIt is necessary to obtain the node table
+-- Get the current server of each dynamic configuration，可以用 get and set， getIt is necessary to obtain the node table
 local CONFIG = {}
 do
 	local function import_config(protocol)
@@ -177,7 +177,7 @@ do
 				end
 			}
 			if t.autoswitch_backup_node and #t.autoswitch_backup_node > 0 then
-				local flag = "Socks节点列表[" .. i .. "]List of backup nodes"
+				local flag = "Socksnode list[" .. i .. "]List of backup nodes"
 				local currentNodes = {}
 				local newNodes = {}
 				for k, node_id in ipairs(t.autoswitch_backup_node) do
@@ -229,7 +229,7 @@ do
 				remarks = "HAProxyLoad balancing node list[" .. i .. "]",
 				currentNode = node_id and uci:get_all(appname, node_id) or nil,
 				set = function(o, server)
-					-- 如果当前 lbss Value is not ip:port Format，才进行修改
+					-- 如果当前 lbss Value is not ip:port Format，Just make changes
 					if not is_ip_port(t[option]) then
 						uci:set(appname, t[".name"], option, server)
 						o.newNodeId = server
@@ -276,7 +276,7 @@ do
 					table.insert(rules, e)
 					table.insert(rules, {
 						[".name"] = e[".name"] .. "_proxy_tag",
-						remarks = e.remarks .. " 前置代理"
+						remarks = e.remarks .. " front proxy"
 					})
 				end
 			end)
@@ -286,7 +286,7 @@ do
 			})
 			table.insert(rules, {
 				[".name"] = "default_proxy_tag",
-				remarks = "默认 front proxy"
+				remarks = "default front proxy"
 			})
 
 			for k, e in pairs(rules) do
@@ -448,7 +448,7 @@ do
 	end
 end
 
--- 取机场信息（remaining traffic、Expiration time）
+-- Get airport information（remaining traffic、Expiration time）
 local subscribe_info = {}
 local function get_subscribe_info(cfgid, value)
 	if type(cfgid) ~= "string" or cfgid == "" or type(value) ~= "string" then
@@ -459,7 +459,7 @@ local function get_subscribe_info(cfgid, value)
 		return
 	end
 	value = value:gsub("%s+", "")
-	local date_patterns = {"Package expires：(.+)", "过期时间：(.+)", "Valid until：(.+)", "Expiration time：(.+)", "expiration date：(.+)"}
+	local date_patterns = {"Package expires：(.+)", "Expiration time：(.+)", "Valid until：(.+)", "Expiration time：(.+)", "expiration date：(.+)"}
 	local expired_date
 	for _, p in ipairs(date_patterns) do expired_date = value:match(p) or expired_date end
 	local rem_patterns = {"remaining traffic：(.+)", "Traffic remaining：(.+)", "Available traffic：(.+)", "Package remaining：(.+)"}
@@ -493,13 +493,13 @@ local function set_ss_implementation(ss_type, result)
 		result.type = 'sing-box'
 		result.protocol = 'shadowsocks'
 	else
-		log("jump over SS node，Not adapted to SS core program，或未正确设置节点使用类型。")
+		log("jump over SS node，Not adapted to SS core program，or the node usage type is not set correctly。")
 		return nil
 	end
 	return result
 end
 
--- 处理数据
+-- Process data
 local function processData(szType, content, add_mode, group, sub_cfg)
 	--log(2, content, add_mode, group)
 	local sub_ss_type = DEFAULT_SS_TYPE
@@ -534,7 +534,7 @@ local function processData(szType, content, add_mode, group, sub_cfg)
 	end
 	local result = {
 		timeout = 60,
-		add_mode = add_mode, --0For manual configuration,1为导入,2for subscription
+		add_mode = add_mode, --0For manual configuration,1for import,2for subscription
 		group = group
 	}
 	--ssr://base64(host:port:protocol:method:obfs:base64pass/?obfsparam=base64param&protoparam=base64param&remarks=base64remarks&group=base64group&udpport=0&uot=0)
@@ -576,7 +576,7 @@ local function processData(szType, content, add_mode, group, sub_cfg)
 		elseif sub_vmess_type == "xray" and has_xray then
 			result.type = "Xray"
 		else
-			log("跳过 VMess node，Not adapted to VMess core program，or the node usage type is not set correctly。")
+			log("jump over VMess node，Not adapted to VMess core program，or the node usage type is not set correctly。")
 			return nil
 		end
 		result.alter_id = info.aid
@@ -966,7 +966,7 @@ local function processData(szType, content, add_mode, group, sub_cfg)
 
 			if params["shadow-tls"] then
 				if result.type ~= "sing-box" and result.type ~= "SS-Rust" then
-					result.error_msg =  sub_ss_type .. " Not supported shadow-tls 插件。"
+					result.error_msg =  sub_ss_type .. " Not supported shadow-tls plug-in。"
 				else
 					-- parseSS Shadow-TLS Plug-in parameters
 					local function parseShadowTLSParams(b64str, out)
@@ -1015,7 +1015,7 @@ local function processData(szType, content, add_mode, group, sub_cfg)
 			result.type = 'Xray'
 			result.protocol = 'trojan'
 		else
-			log("跳过 Trojan node，因未适配到 Trojan 核心程序，or the node usage type is not set correctly。")
+			log("jump over Trojan node，因未适配到 Trojan core program，or the node usage type is not set correctly。")
 			return nil
 		end
 		
@@ -1155,7 +1155,7 @@ local function processData(szType, content, add_mode, group, sub_cfg)
 			result.finalmask = (params.fm and params.fm ~= "") and api.base64Encode(params.fm) or nil
 
 			if result.type == "sing-box" and (result.transport == "mkcp" or result.transport == "xhttp") then
-				log("skip node：" .. result.remarks .."，because Sing-Box 不支持 " .. szType .. " agreed " .. result.transport .. " 传输方式，Need to be replaced Xray。")
+				log("skip node：" .. result.remarks .."，because Sing-Box Not supported " .. szType .. " agreed " .. result.transport .. " 传输方式，Need to be replaced Xray。")
 				return nil
 			end
 		end
@@ -1339,7 +1339,7 @@ local function processData(szType, content, add_mode, group, sub_cfg)
 			result.finalmask = (params.fm and params.fm ~= "") and api.base64Encode(params.fm) or nil
 
 			if result.type == "sing-box" and (result.transport == "mkcp" or result.transport == "xhttp") then
-				log("skip node：" .. result.remarks .."，because Sing-Box Not supported " .. szType .. " 协议的 " .. result.transport .. " Transmission method，需更换 Xray。")
+				log("skip node：" .. result.remarks .."，because Sing-Box Not supported " .. szType .. " agreed " .. result.transport .. " Transmission method，Need to be replaced Xray。")
 				return nil
 			end
 		end
@@ -1461,7 +1461,7 @@ local function processData(szType, content, add_mode, group, sub_cfg)
 			result.type = 'sing-box'
 			result.protocol = "tuic"
 		else
-			log("jump over Tuic node，因未安装 Tuic 核心程序 Sing-box。")
+			log("jump over Tuic node，Not installed Tuic 核心程序 Sing-box。")
 			return nil
 		end
 
@@ -1518,7 +1518,7 @@ local function processData(szType, content, add_mode, group, sub_cfg)
 			result.type = 'sing-box'
 			result.protocol = "anytls"
 		else
-			log("跳过 AnyTLS node，Not installed AnyTLS core program Sing-box 1.12。")
+			log("jump over AnyTLS node，Not installed AnyTLS core program Sing-box 1.12。")
 			return nil
 		end
 
@@ -1602,7 +1602,7 @@ local function processData(szType, content, add_mode, group, sub_cfg)
 			local contents = split(content, "@")
 			local auth = contents[1] or ""
 			local idx = auth:find(":", 1, true)
-			if not idx then --Fixed some linksusernameandpasswordbetween:进行编码
+			if not idx then --Fixed some linksusernameandpasswordbetween:Encode
 				auth = UrlDecode(auth)
 				idx = auth:find(":", 1, true)
 			end
@@ -1644,7 +1644,7 @@ local function processData(szType, content, add_mode, group, sub_cfg)
 			result.naive_congestion_control = params.congestion_control or "bbr"
 		end
 	else
-		log("Not supported at the moment " .. szType .. " Node subscription of type，跳过此节点。")
+		log("Not supported at the moment " .. szType .. " Node subscription of type，Skip this node。")
 		return nil
 	end
 	if not result.remarks or result.remarks == "" then
@@ -1811,7 +1811,7 @@ local function select_node(nodes, config, parentConfig)
 				end
 			end
 		end
-		-- 第四优先级 IP + Group
+		-- fourth priority IP + Group
 		if not server then
 			for index, node in pairs(nodes) do
 				if config.currentNode.address then
@@ -1827,7 +1827,7 @@ local function select_node(nodes, config, parentConfig)
 				end
 			end
 		end
-		-- Fifth priority remarks + 分组
+		-- Fifth priority remarks + Group
 		if not server then
 			for index, node in pairs(nodes) do
 				if config.currentNode.remarks then

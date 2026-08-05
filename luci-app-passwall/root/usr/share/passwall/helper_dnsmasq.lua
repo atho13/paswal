@@ -330,7 +330,7 @@ function add_rule(var)
 
 	local only_global
 	if DEFAULT_PROXY_MODE == "proxy" and CHN_LIST == "0" and USE_GFW_LIST == "0" then
-		--China list is not enabled andGFW列表时
+		--China list is not enabled andGFWlist
 		dnsmasq_default_dns = TUN_DNS
 		only_global = 1
 	end

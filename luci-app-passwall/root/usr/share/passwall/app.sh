@@ -188,7 +188,7 @@ run_singbox() {
 	if [ "${status}" = 0 ]; then
 		ln_run "$SINGBOX_BIN" "sing-box" "${log_file}" run -c "$config_file"
 	else
-		echolog "Sing-box Configuration file $config_file Check error，Process startup failed，错误信息："
+		echolog "Sing-box Configuration file $config_file Check error，Process startup failed，error message："
 		cat ${test_log_file} >> ${LOG_FILE}
 	fi
 	[ "$test_log_file" != "$log_file" ] && rm -f "${test_log_file}"
@@ -278,7 +278,7 @@ run_xray() {
 	if [ "${status}" = 0 ]; then
 		ln_run "$XRAY_BIN" "xray" "${log_file}" run -c "$config_file"
 	else
-		echolog "Xray Configuration file $config_file Check error，进程启动失败，error message："
+		echolog "Xray Configuration file $config_file Check error，Process startup failed，error message："
 		cat ${test_log_file} >> ${LOG_FILE}
 	fi
 	[ "$test_log_file" != "$log_file" ] && rm -f "${test_log_file}"
@@ -607,7 +607,7 @@ run_redir() {
 				local geoip_path="${V2RAY_LOCATION_ASSET%*/}/geoip.dat"
 				local geosite_path="${V2RAY_LOCATION_ASSET%*/}/geosite.dat"
 				if [ ! -s "$geoip_path" ] || [ ! -s "$geosite_path" ]; then
-					echolog "* 缺少Georules file，UDP XrayThe offload node cannot be used normally！"
+					echolog "* LackGeorules file，UDP XrayThe offload node cannot be used normally！"
 				fi
 			}
 			run_xray flag=UDP node=$node udp_redir_port=$local_port config_file=$config_file log_file=$log_file
@@ -1002,7 +1002,7 @@ start_socks() {
 				[ "$enable_autoswitch" = "1" ] && no_rec=1
 				NO_REC_PROCESS=$no_rec $APP_PATH/app.sh run_socks flag=$id node=$node bind=$bind socks_port=$port config_file=$config_file http_port=$http_port http_config_file=$http_config_file log_file=$log_file
 				set_cache_var "socks_${id}" "$node"
-				#自动切换逻辑
+				#Automatic switching logic
 				[ "$enable_autoswitch" = "1" ] && { $APP_PATH/socks_auto_switch.sh ${id} > /dev/null 2>&1 & }
 			done
 		}
@@ -1119,7 +1119,7 @@ start_crontab() {
 	# ===== stop/start/restart =====
 	add_service_cron "$(config_t_get global_delay stop_week_mode)" "$(config_t_get global_delay stop_time_mode)" "stop" "Configure scheduled tasks：自动关闭服务。"
 
-	add_service_cron "$(config_t_get global_delay start_week_mode)" "$(config_t_get global_delay start_time_mode)" "start" "配置定时任务：Automatically start service。"
+	add_service_cron "$(config_t_get global_delay start_week_mode)" "$(config_t_get global_delay start_time_mode)" "start" "Configure scheduled tasks：Automatically start service。"
 
 	add_service_cron "$(config_t_get global_delay restart_week_mode)" "$(config_t_get global_delay restart_time_mode)" "restart" "配置定时任务：Automatically restart service。"
 
@@ -1193,7 +1193,7 @@ start_dns() {
 	local sing_box_local_dns=
 	local direct_dns_mode=$(config_t_get global direct_dns_mode "auto")
 
-	#Get the access control node usedDNS分流模式
+	#Get the access control node usedDNSshunt mode
 	local ACL_RULE_DNSMASQ=0
 	for acl_section in $(uci show ${CONFIG} | grep "=acl_rule" | cut -d '.' -sf 2 | cut -d '=' -sf 1); do
 		if [ "$(config_n_get $acl_section enabled)" = "1" ] && \
@@ -1492,7 +1492,7 @@ start_haproxy() {
 	[ "$(config_t_get global_haproxy balancing_enable 0)" != "1" ] && return
 	local haproxy_ver=$($(first_type haproxy) -v 2>/dev/null | awk 'NR==1 {print $3}' | cut -d'-' -f1)
 	if [ "$(check_ver "$haproxy_ver" "3.0.0")" = "1" ]; then
-		echolog "* 注意：haproxy($haproxy_ver) Program version is low，HAPROXY Load balancing startup failed，Please update to 3.0 above version。"
+		echolog "* Notice：haproxy($haproxy_ver) Program version is low，HAPROXY Load balancing startup failed，Please update to 3.0 above version。"
 		return
 	fi
 	local haproxy_path=$TMP_PATH/haproxy
@@ -1607,7 +1607,7 @@ acl_app() {
 								type=$(echo $(config_n_get $tcp_node type) | tr 'A-Z' 'a-z')
 								protocol=$(config_n_get $tcp_node protocol)
 							fi
-							#兼容旧模式，Optional removal
+							#Compatible with old models，Optional removal
 							[ "$v2ray_dns_mode" = "tcp+doh" ] && v2ray_dns_mode="tcp"
 							([ "$type" = "sing-box" ] || [ "$type" = "xray" ]) && [ "$protocol" = "_shunt" ] && [ "$type" != "$dns_mode" ] && {
 								dns_mode=$type
@@ -1647,7 +1647,7 @@ acl_app() {
 									chinadns_ng_min=2024.04.13
 									chinadns_ng_now=$($(first_type chinadns-ng) -V | grep -i "ChinaDNS-NG " | awk '{print $2}')
 									if [ $(check_ver "$chinadns_ng_now" "$chinadns_ng_min") = 1 ]; then
-										echolog "  * Notice：current ChinaDNS-NG The version is[ $chinadns_ng_now ]，请更新到[ $chinadns_ng_min ]或以上版本，otherwise DNS May not work properly！"
+										echolog "  * Notice：current ChinaDNS-NG The version is[ $chinadns_ng_now ]，请更新到[ $chinadns_ng_min ]or above，otherwise DNS May not work properly！"
 									fi
 
 									[ "$filter_proxy_ipv6" = "1" ] && dnsmasq_filter_proxy_ipv6=0

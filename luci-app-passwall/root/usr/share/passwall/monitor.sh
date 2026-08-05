@@ -41,7 +41,7 @@ while [ 1 -eq 1 ]; do
 		if ! busybox pgrep -f "$cmd_check" >/dev/null; then
 			restart_count=$((restart_count + 1))
 			echo "$restart_count" > "$stats_file"
-			#echo "${cmd} 进程挂掉，Restart" >> /tmp/log/passwall.log
+			#echo "${cmd} Process hangs，Restart" >> /tmp/log/passwall.log
 			sh -c "nohup $cmd 2>&1 &"
 			sleep 1
 		fi

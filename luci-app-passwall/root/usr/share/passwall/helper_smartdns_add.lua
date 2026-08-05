@@ -113,7 +113,7 @@ end
 
 local LOCAL_EXTEND_ARG = ""
 if LOCAL_GROUP == "null" or LOCAL_GROUP == "" then
-	log("  * 注意：SmartDNS 国内分组名未设置，DNS will not work properly！！！")
+	log("  * Notice：SmartDNS Domestic group name is not set，DNS will not work properly！！！")
 	os.exit(1)
 else
 	--fromsmartdns配置中读取参数
@@ -153,7 +153,7 @@ else
 		end
 		f_in:close()
 	end
-	-- 从 smartdns 配置中读取值，优先级以 custom.conf Subject to
+	-- from smartdns Read value from configuration，优先级以 custom.conf Subject to
 	for _, opt in ipairs(options) do
 		local val
 		if opt.get_value then
@@ -276,7 +276,7 @@ end
 local setflag = (NFTFLAG == "1") and "inet#passwall#" or ""
 local set_type = (NFTFLAG == "1") and "-nftset" or "-ipset"
 
---Default sort labels(越往后优先级越高)
+--Default sort labels(The further back, the higher the priority.)
 for i = 1, 8 do
 	table.insert(config_lines, "#--" .. i)
 end
@@ -306,7 +306,7 @@ if USE_BLOCK_LIST == "1" and not fs.access(file_block_host) then
 	end
 	if USE_GEOVIEW == "1" and geosite_arg ~= "" and api.is_finded("geoview") then
 		if get_geosite(geosite_arg, file_block_host) == 0 then
-			log("  * parse[Block list] Geosite 到屏蔽域名表(blocklist)Finish")
+			log("  * parse[Block list] Geosite To the blocked domain name table(blocklist)Finish")
 		else
 			log("  * parse[Block list] Geosite To the blocked domain name table(blocklist)fail！")
 		end
@@ -392,9 +392,9 @@ if USE_DIRECT_LIST == "1" and not fs.access(file_direct_host) then
 	end
 	if USE_GEOVIEW == "1" and geosite_arg ~= "" and api.is_finded("geoview") then
 		if get_geosite(geosite_arg, file_direct_host) == 0 then
-			log("  * parse[Direct connection list] Geosite To the domain name whitelist(whitelist)完成")
+			log("  * parse[Direct connection list] Geosite To the domain name whitelist(whitelist)Finish")
 		else
-			log("  * parse[Direct connection list] Geosite 到域名白名单(whitelist)fail！")
+			log("  * parse[Direct connection list] Geosite To the domain name whitelist(whitelist)fail！")
 		end
 	end
 end
@@ -442,7 +442,7 @@ if USE_PROXY_LIST == "1" and not fs.access(file_proxy_host) then
 		if get_geosite(geosite_arg, file_proxy_host) == 0 then
 			log("  * 解析[proxy list] Geosite To the proxy domain name table(blacklist)Finish")
 		else
-			log("  * 解析[proxy list] Geosite To the proxy domain name table(blacklist)fail！")
+			log("  * parse[proxy list] Geosite To the proxy domain name table(blacklist)fail！")
 		end
 	end
 end
@@ -488,7 +488,7 @@ if USE_GFW_LIST == "1" and is_file_nonzero(RULES_PATH .. "/gfwlist") then
 	end
 	table.insert(tmp_lines, domain_rules_str)
 	insert_array_after(config_lines, tmp_lines, "#--1")
-	log(string.format("  - 防火墙域名表(gfwlist)Use grouping：%s", REMOTE_GROUP or "default"))
+	log(string.format("  - Firewall domain name table(gfwlist)Use grouping：%s", REMOTE_GROUP or "default"))
 end
 
 --China list
@@ -679,4 +679,4 @@ end
 
 fs.symlink(TMP_CONF_FILE, SMARTDNS_CONF)
 sys.call(string.format('echo "conf-file %s" >> /etc/smartdns/custom.conf', string.gsub(SMARTDNS_CONF, appname, appname .. "*")))
-log("  - SmartDNS已作为Dnsmasqupstream，If you configure the wrongDNS流程，将会导致域名(direct connection/Proxy domain name)Shunt failure！！！")
+log("  - SmartDNS已作为Dnsmasqupstream，If you configure the wrongDNSprocess，will result in domain name(direct connection/Proxy domain name)Shunt failure！！！")

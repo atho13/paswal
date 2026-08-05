@@ -209,7 +209,7 @@ listen %s
 			sys.call(string.format(". /usr/share/%s/utils.sh ; add_ip2route %s %s", appname, o.origin_address, o.export))
 		end
 
-		log(string.format("  | - 出口节点：%s:%s，weight：%s", o.origin_address, o.origin_port, o.lbweight))
+		log(string.format("  | - exit node：%s:%s，weight：%s", o.origin_address, o.origin_port, o.lbweight))
 	end
 end
 

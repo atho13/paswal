@@ -359,7 +359,7 @@ check_ver() {
 			echo 0
 			return
 		elif [ "$v1" -lt "$v2" ]; then
-			# $1 小于 $2
+			# $1 less than $2
 			echo 1
 			return
 		fi
@@ -444,9 +444,9 @@ add_ip2route() {
 	if [ -n "${gateway}" ]; then
 		route add -host ${ip} gw ${gateway} dev ${device} >/dev/null 2>&1
 		echo "$ip" >> $TMP_ROUTE_PATH/${device}
-		echolog "  - [${remarks}]Add to interface[${device}]路由表成功！"
+		echolog "  - [${remarks}]Add to interface[${device}]Routing table successful！"
 	else
-		echolog "  - [${remarks}]Add to interface[${device}]Routing table failure！The reason is that it cannot be found[${device}]网关。"
+		echolog "  - [${remarks}]Add to interface[${device}]Routing table failure！The reason is that it cannot be found[${device}]gateway。"
 	fi
 }
 
