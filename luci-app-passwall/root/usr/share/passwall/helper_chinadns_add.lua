@@ -148,7 +148,7 @@ if USE_BLOCK_LIST == "1" and not fs.access(file_block_host) then
 	end
 	if USE_GEOVIEW == "1" and geosite_arg ~= "" and api.is_finded("geoview") then
 		if get_geosite(geosite_arg, file_block_host) == 0 then
-			log("  * 解析[Block list] Geosite To the blocked domain name table(blocklist)Finish")
+			log("  * parse[Block list] Geosite To the blocked domain name table(blocklist)Finish")
 		else
 			log("  * parse[Block list] Geosite To the blocked domain name table(blocklist)fail！")
 		end
@@ -162,7 +162,7 @@ if USE_BLOCK_LIST == "1" and is_file_nonzero(file_block_host) then
 	insert_array_after(config_lines, tmp_lines, "#--5")
 end
 
---始终用国内DNSResolve node domain name
+--Always use domesticDNSResolve node domain name
 local file_vpslist = TMP_ACL_PATH .. "/vpslist"
 if not is_file_nonzero(file_vpslist) then
 	local f_out = io.open(file_vpslist, "w")
@@ -279,7 +279,7 @@ if USE_PROXY_LIST == "1" and not fs.access(file_proxy_host) then
 		if get_geosite(geosite_arg, file_proxy_host) == 0 then
 			log("  * parse[proxy list] Geosite To the proxy domain name table(blacklist)Finish")
 		else
-			log("  * 解析[proxy list] Geosite To the proxy domain name table(blacklist)fail！")
+			log("  * parse[proxy list] Geosite To the proxy domain name table(blacklist)fail！")
 		end
 	end
 end
@@ -538,4 +538,4 @@ if #config_lines > 0 then
 	end
 end
 
-log("  - ChinaDNS-NGAlready acted asDnsmasqupstream，If you configure the wrongDNSprocess，将会导致域名(direct connection/Proxy domain name)Shunt failure！！！")
+log("  - ChinaDNS-NGAlready acted asDnsmasqupstream，If you configure the wrongDNSprocess，will result in domain name(direct connection/Proxy domain name)Shunt failure！！！")

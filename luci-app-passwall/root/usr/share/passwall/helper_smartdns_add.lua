@@ -69,7 +69,7 @@ local function merge_array(array1, array2)
 	end
 end
 
-local function insert_array_before(array1, array2, target) --Willarray2插入到array1oftargetFront，targetAppend if it does not exist
+local function insert_array_before(array1, array2, target) --Willarray2Insert intoarray1oftargetFront，targetAppend if it does not exist
 	for i, line in ipairs(array1) do
 		if line == target then
 			for j = #array2, 1, -1 do
@@ -116,7 +116,7 @@ if LOCAL_GROUP == "null" or LOCAL_GROUP == "" then
 	log("  * Notice：SmartDNS Domestic group name is not set，DNS will not work properly！！！")
 	os.exit(1)
 else
-	--fromsmartdns配置中读取参数
+	--fromsmartdnsRead parameters in configuration
 	local custom_conf_path = "/etc/smartdns/custom.conf"
 	local options = {
 		{key = "dualstack_ip_selection", config_key = "dualstack-ip-selection", yes_no = true, arg_yes = "-d yes", arg_no = "-d no", default = "yes"},
@@ -153,7 +153,7 @@ else
 		end
 		f_in:close()
 	end
-	-- from smartdns Read value from configuration，优先级以 custom.conf Subject to
+	-- from smartdns Read value from configuration，The priority is custom.conf Subject to
 	for _, opt in ipairs(options) do
 		local val
 		if opt.get_value then
@@ -364,7 +364,7 @@ if is_file_nonzero(file_vpslist) then
 	domain_rules_str = domain_rules_str .. (LOCAL_EXTEND_ARG ~= "" and " " .. LOCAL_EXTEND_ARG or "")
 	table.insert(tmp_lines, domain_rules_str)
 	insert_array_after(config_lines, tmp_lines, "#--8")
-	log(string.format("  - Domain name in node list(vpslist)使用分组：%s", LOCAL_GROUP or "default"))
+	log(string.format("  - Domain name in node list(vpslist)Use grouping：%s", LOCAL_GROUP or "default"))
 end
 
 --direct connection（whitelist）list
@@ -679,4 +679,4 @@ end
 
 fs.symlink(TMP_CONF_FILE, SMARTDNS_CONF)
 sys.call(string.format('echo "conf-file %s" >> /etc/smartdns/custom.conf', string.gsub(SMARTDNS_CONF, appname, appname .. "*")))
-log("  - SmartDNS已作为Dnsmasqupstream，If you configure the wrongDNSprocess，will result in domain name(direct connection/Proxy domain name)Shunt failure！！！")
+log("  - SmartDNSAlready acted asDnsmasqupstream，If you configure the wrongDNSprocess，will result in domain name(direct connection/Proxy domain name)Shunt failure！！！")

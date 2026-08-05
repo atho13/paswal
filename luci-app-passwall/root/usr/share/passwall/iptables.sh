@@ -65,7 +65,7 @@ comment() {
 	echo "-m comment --comment "${name}""
 }
 
-#解决端口超过15indivualiptinvalid，Support single port、port range
+#Solve the problem of port exceeding15indivualiptinvalid，Support single port、port range
 add_port_rules() {
 	local ipt_cmd="$1"
 	local port_list="$2"
@@ -633,7 +633,7 @@ load_acl() {
 				[ "${USE_GFW_LIST}" = "1" ] && add_port_rules "$ipt_m -A PSW $(comment "default") -p udp" $UDP_PROXY_DROP_PORTS "$(dst $IPSET_GFW) -j MARK --set-mark 88"
 				[ "${CHN_LIST}" != "0" ] && add_port_rules "$ipt_m -A PSW $(comment "default") -p udp" $UDP_PROXY_DROP_PORTS "$(dst $IPSET_CHN) $(get_jump_ipt ${CHN_LIST} "-j MARK --set-mark 88")"
 				[ "${USE_SHUNT_UDP}" = "1" ] && add_port_rules "$ipt_m -A PSW $(comment "default") -p udp" $UDP_PROXY_DROP_PORTS "$(dst $IPSET_SHUNT) -j MARK --set-mark 88"
-				[ "${UDP_PROXY_MODE}" != "disable" ] && add_port_rules "$ipt_m -A PSW $(comment "默认") -p udp" $UDP_PROXY_DROP_PORTS "-j MARK --set-mark 88"
+				[ "${UDP_PROXY_MODE}" != "disable" ] && add_port_rules "$ipt_m -A PSW $(comment "default") -p udp" $UDP_PROXY_DROP_PORTS "-j MARK --set-mark 88"
 				echolog "     - ${msg}Block proxy UDP port[${UDP_PROXY_DROP_PORTS}]"
 			}
 
@@ -669,7 +669,7 @@ load_acl() {
 				}
 				
 				[ "$accept_icmpv6" = "1" ] && [ "$PROXY_IPV6" = "1" ] && {
-					[ "${USE_FAKEDNS}" = "1" ] && $ip6t_n -A PSW $(comment "默认") -p ipv6-icmp -d $FAKE_IP_6 $(REDIRECT)
+					[ "${USE_FAKEDNS}" = "1" ] && $ip6t_n -A PSW $(comment "default") -p ipv6-icmp -d $FAKE_IP_6 $(REDIRECT)
 					[ "${USE_PROXY_LIST}" = "1" ] && $ip6t_n -A PSW $(comment "default") -p ipv6-icmp $(dst $IPSET_BLACK6) $(REDIRECT)
 					[ "${USE_GFW_LIST}" = "1" ] && $ip6t_n -A PSW $(comment "default") -p ipv6-icmp $(dst $IPSET_GFW6) $(REDIRECT)
 					[ "${CHN_LIST}" != "0" ] && $ip6t_n -A PSW $(comment "default") -p ipv6-icmp $(dst $IPSET_CHN6) $(get_jump_ipt ${CHN_LIST})
@@ -677,7 +677,7 @@ load_acl() {
 					[ "${TCP_PROXY_MODE}" != "disable" ] && $ip6t_n -A PSW $(comment "default") -p ipv6-icmp $(REDIRECT)
 				}
 
-				[ "${USE_FAKEDNS}" = "1" ] && $ipt_tmp -A PSW $(comment "默认") -p tcp -d $FAKE_IP ${ipt_j}
+				[ "${USE_FAKEDNS}" = "1" ] && $ipt_tmp -A PSW $(comment "default") -p tcp -d $FAKE_IP ${ipt_j}
 				[ "${USE_PROXY_LIST}" = "1" ] && add_port_rules "$ipt_tmp -A PSW $(comment "default") -p tcp" $TCP_REDIR_PORTS "$(dst $IPSET_BLACK) ${ipt_j}"
 				[ "${USE_GFW_LIST}" = "1" ] && add_port_rules "$ipt_tmp -A PSW $(comment "default") -p tcp" $TCP_REDIR_PORTS "$(dst $IPSET_GFW) ${ipt_j}"
 				[ "${CHN_LIST}" != "0" ] && add_port_rules "$ipt_tmp -A PSW $(comment "default") -p tcp" $TCP_REDIR_PORTS "$(dst $IPSET_CHN) $(get_jump_ipt ${CHN_LIST} "${ipt_j}")"
@@ -750,7 +750,7 @@ filter_vpsip() {
 	uci show $CONFIG | grep -E "(\.address=|\.download_address=|\.domain_resolver_dns=|\.domain_resolver_dns_https=)" | cut -d "'" -f 2 | grep -Eo "([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -Ev "$EXCLUDE_VPSIP" | sed "s/^/add $IPSET_VPS /" | awk '1; END{print "COMMIT"}' | ipset -! -R
 	echolog "  - [$?]Join allIPv4node toipset[$IPSET_VPS]Direct connection completed"
 	uci show $CONFIG | grep -E "(\.address=|\.download_address=|\.domain_resolver_dns=|\.domain_resolver_dns_https=)" | cut -d "'" -f 2 | grep -Eo "\[?[A-Fa-f0-9:]*:[A-Fa-f0-9:]+\]?" | sed "s/^/add $IPSET_VPS6 /" | awk '1; END{print "COMMIT"}' | ipset -! -R
-	echolog "  - [$?]Join allIPv6node toipset[$IPSET_VPS6]直连完成"
+	echolog "  - [$?]Join allIPv6node toipset[$IPSET_VPS6]Direct connection completed"
 	#When the subscription method is direct connection
 	get_subscribe_host | grep -Eo "([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -Ev "$EXCLUDE_VPSIP" | sed "s/^/add $IPSET_VPS /" | awk '{print $0} END{print "COMMIT"}' | ipset -! -R
 	get_subscribe_host | grep -Eo "\[?[A-Fa-f0-9:]*:[A-Fa-f0-9:]+\]?" | sed "s/^/add $IPSET_VPS6 /" | awk '{print $0} END{print "COMMIT"}' | ipset -! -R
@@ -821,7 +821,7 @@ update_wan_sets() {
 		[ "$log" = "log" ] && {
 			local wan_ip
 			for wan_ip in $WAN_IP; do
-				echolog "  - [$?]join inWAN IPv4到ipset[$IPSET_WAN]：${wan_ip}"
+				echolog "  - [$?]join inWAN IPv4arriveipset[$IPSET_WAN]：${wan_ip}"
 			done
 		}
 	}
@@ -1087,7 +1087,7 @@ add_firewall_rule() {
 			if echo "$dns_address" | grep -q -v ':'; then
 				$ipt_m -A PSW_OUTPUT -p udp -d ${dns_address} --dport ${dns_port:-53} -j RETURN
 				$ipt_m -A PSW_OUTPUT -p tcp -d ${dns_address} --dport ${dns_port:-53} -j RETURN
-				echolog "  - [$?]追加直连DNSarriveiptables：${dns_address}:${dns_port:-53}"
+				echolog "  - [$?]Add direct connectionDNSarriveiptables：${dns_address}:${dns_port:-53}"
 			else
 				$ip6t_m -A PSW_OUTPUT -p udp -d ${dns_address} --dport ${dns_port:-53} -j RETURN
 				$ip6t_m -A PSW_OUTPUT -p tcp -d ${dns_address} --dport ${dns_port:-53} -j RETURN
@@ -1177,7 +1177,7 @@ add_firewall_rule() {
 			add_port_rules "$ipt_tmp -A PSW_OUTPUT -p tcp" $TCP_NO_REDIR_PORTS "-j RETURN"
 			add_port_rules "$ip6t_m -A PSW_OUTPUT -p tcp" $TCP_NO_REDIR_PORTS "-j RETURN"
 			if ! has_1_65535 "$TCP_NO_REDIR_PORTS"; then
-				echolog "  - ${msg}不代理 TCP port[${TCP_NO_REDIR_PORTS}]"
+				echolog "  - ${msg}Not an agent TCP port[${TCP_NO_REDIR_PORTS}]"
 			else
 				unset LOCALHOST_TCP_PROXY_MODE
 				echolog "  - ${msg}Not representing all TCP port"
@@ -1191,7 +1191,7 @@ add_firewall_rule() {
 				echolog "  - ${msg}Not an agent UDP port[${UDP_NO_REDIR_PORTS}]"
 			else
 				unset LOCALHOST_UDP_PROXY_MODE
-				echolog "  - ${msg}不代理所有 UDP port"
+				echolog "  - ${msg}Not representing all UDP port"
 			fi
 		}
 
@@ -1313,12 +1313,12 @@ add_firewall_rule() {
 				if echo "${2}" | grep -q -v ':'; then
 					ipset -q test $IPSET_LAN ${2}
 					[ $? = 0 ] && {
-						echolog "  - upstream DNS server ${2} Already on the list for direct access，不强制向 UDP Proxy forwards to this server UDP/${3} Port access"
+						echolog "  - upstream DNS server ${2} Already on the list for direct access，Not forced to UDP Proxy forwards to this server UDP/${3} Port access"
 						return 0
 					}
 					$ipt_m -I PSW_OUTPUT -p udp -d ${2} --dport ${3} -j PSW_RULE
 					$ipt_m -I PSW $(comment "local machine") -p udp -i lo -d ${2} --dport ${3} $(REDIRECT $UDP_REDIR_PORT TPROXY)
-					echolog "  - [$?]will be upstream DNS server ${2}:${3} 加入到路由器自身代理的 UDP forwarding chain"
+					echolog "  - [$?]will be upstream DNS server ${2}:${3} Added to the router's own proxy UDP forwarding chain"
 				else
 					ipset -q test $IPSET_LAN6 ${2}
 					[ $? = 0 ] && {

@@ -364,7 +364,7 @@ run_socks() {
 		}
 		tmp="${server_host}:${server_port}"
 	else
-		error_msg="some reason，this Socks 服务的相关配置已失联，Start abort！"
+		error_msg="some reason，this Socks The relevant configuration of the service has been lost.，Start abort！"
 	fi
 
 	if [ "$type" = "sing-box" ] || [ "$type" = "xray" ]; then
@@ -558,7 +558,7 @@ run_redir() {
 		fi
 		server_host="127.0.0.1"
 		port=$node2socks_port
-		remarks="Socks Configuration($port 端口)"
+		remarks="Socks Configuration($port port)"
 	fi
 
 	local enable_log=$(config_t_get global log_${proto} 1)
@@ -645,7 +645,7 @@ run_redir() {
 		tcp_node_http_port=$(config_t_get global tcp_node_http_port 0)
 		[ "$tcp_node_http_port" != "0" ] && tcp_node_http=1
 		if [ $PROXY_IPV6 = "1" ]; then
-			echolog "Turn on experimentalIPv6透明代理(TProxy)，Please confirm that your node and type supportIPv6！"
+			echolog "Turn on experimentalIPv6transparent proxy(TProxy)，Please confirm that your node and type supportIPv6！"
 		fi
 
 		if [ "${TCP_PROXY_WAY}" = "redirect" ]; then
@@ -710,7 +710,7 @@ run_redir() {
 				local geoip_path="${V2RAY_LOCATION_ASSET%*/}/geoip.dat"
 				local geosite_path="${V2RAY_LOCATION_ASSET%*/}/geosite.dat"
 				if [ ! -s "$geoip_path" ] || [ ! -s "$geosite_path" ]; then
-					echolog "* LackGeorules file，TCP Sing-Box分流节点无法正常使用！"
+					echolog "* LackGeorules file，TCP Sing-BoxThe offload node cannot be used normally！"
 				fi
 				[ "$(config_n_get $node fakedns)" = "1" ] && {
 					USE_FAKEDNS=1
@@ -1117,11 +1117,11 @@ start_crontab() {
 	}
 
 	# ===== stop/start/restart =====
-	add_service_cron "$(config_t_get global_delay stop_week_mode)" "$(config_t_get global_delay stop_time_mode)" "stop" "Configure scheduled tasks：自动关闭服务。"
+	add_service_cron "$(config_t_get global_delay stop_week_mode)" "$(config_t_get global_delay stop_time_mode)" "stop" "Configure scheduled tasks：Automatically shut down services。"
 
 	add_service_cron "$(config_t_get global_delay start_week_mode)" "$(config_t_get global_delay start_time_mode)" "start" "Configure scheduled tasks：Automatically start service。"
 
-	add_service_cron "$(config_t_get global_delay restart_week_mode)" "$(config_t_get global_delay restart_time_mode)" "restart" "配置定时任务：Automatically restart service。"
+	add_service_cron "$(config_t_get global_delay restart_week_mode)" "$(config_t_get global_delay restart_time_mode)" "restart" "Configure scheduled tasks：Automatically restart service。"
 
 	# ===== rule update =====
 	local rules_update_week_mode=$(config_t_get global_rules update_week_mode)
@@ -1647,7 +1647,7 @@ acl_app() {
 									chinadns_ng_min=2024.04.13
 									chinadns_ng_now=$($(first_type chinadns-ng) -V | grep -i "ChinaDNS-NG " | awk '{print $2}')
 									if [ $(check_ver "$chinadns_ng_now" "$chinadns_ng_min") = 1 ]; then
-										echolog "  * Notice：current ChinaDNS-NG The version is[ $chinadns_ng_now ]，请更新到[ $chinadns_ng_min ]or above，otherwise DNS May not work properly！"
+										echolog "  * Notice：current ChinaDNS-NG The version is[ $chinadns_ng_now ]，Please update to[ $chinadns_ng_min ]or above，otherwise DNS May not work properly！"
 									fi
 
 									[ "$filter_proxy_ipv6" = "1" ] && dnsmasq_filter_proxy_ipv6=0
@@ -1910,7 +1910,7 @@ stop() {
 	eval_cache_var
 	[ -n "$USE_TABLES" ] && source $APP_PATH/${USE_TABLES}.sh stop
 	delete_ip2route
-	# Finish SS 插件进程
+	# Finish SS Plug-in process
 	# kill_all xray-plugin v2ray-plugin obfs-local shadow-tls
 	local pid_file pid
 	find "$TMP_PATH" -type f -name '*_plugin.pid' 2>/dev/null | while read -r pid_file; do

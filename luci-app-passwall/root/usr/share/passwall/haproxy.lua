@@ -213,7 +213,7 @@ listen %s
 	end
 end
 
---控制台配置
+--Console configuration
 local console_user = uci:get(appname, "@global_haproxy[0]", "console_user")
 local console_password = uci:get(appname, "@global_haproxy[0]", "console_password")
 local str = [[

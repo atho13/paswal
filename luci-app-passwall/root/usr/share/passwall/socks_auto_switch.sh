@@ -126,7 +126,7 @@ test_auto_switch() {
 			# If the current node is not found，Or the current node is the last one，Just take the first node
 			[ -z "$new_node" ] && new_node="$first_node"
 			if [ "$new_node" = "$main_node" ]; then
-				msg="切换到主节点检测！"
+				msg="Switch to master node detection！"
 			else
 				msg="switch to$([ "$now_node" = "$main_node" ] && echo Standby node || echo next standby node)Detection！"
 			fi

@@ -213,7 +213,7 @@ local function is_ipv4(s, check_cidr)
 		local seg = tonumber(s:sub(seg_start))
 		return seg and seg <= 255 or false
 	end
-	-- CIDR 掩码检查
+	-- CIDR Mask check
 	if mask_start > len then return false end
 	local mask = tonumber(s:sub(mask_start))
 	return mask and mask >= 0 and mask <= 32 or false
@@ -270,7 +270,7 @@ local function is_ipv6(s, check_cidr)
 				seg_len = 0
 				i = i + 2
 			else
-				-- 普通 ":"
+				-- ordinary ":"
 				if seg_len == 0 then return false end
 				segs = segs + 1
 				seg_len = 0
@@ -298,7 +298,7 @@ local function is_ipv6_cidr(s)
 	return is_ipv6(s, true)
 end
 
--- 检测是否含有冒号，substitute string.find(line, ":")
+-- Check for colon，substitute string.find(line, ":")
 local function has_colon(s)
 	for i = 1, #s do
 		if s:byte(i) == 58 then  -- ':'
@@ -308,7 +308,7 @@ local function has_colon(s)
 	return false
 end
 
--- Domain name extraction，替代 string.match "([%w%-]+%.[%w%.%-]+)[%/%*]*"
+-- Domain name extraction，substitute string.match "([%w%-]+%.[%w%.%-]+)[%/%*]*"
 local function extract_domain(s)
 	if not s or s == "" then return nil end
 	local len = #s
@@ -523,7 +523,7 @@ local function fetch_rule(rule_name, rule_type, url, exclude_domain, max_retries
 			os.remove(file_tmp)
 		end
 	else
-		log(rule_name .. " Update failed（部分或全部资源无法下载）。")
+		log(rule_name .. " Update failed（Some or all resources cannot be downloaded）。")
 		os.remove(file_tmp)
 	end
 	return 0
@@ -566,12 +566,12 @@ local function fetch_geofile(geo_name, geo_type, url)
 
 	local sret_tmp, _, header = curl(url, tmp_path)
 	if sret_tmp == 0 and non_file_check(tmp_path, header) then
-		log(geo_type .. " 下载文件过程出错，尝试重新下载。")
+		log(geo_type .. " An error occurred while downloading the file，Try downloading again。")
 		os.remove(tmp_path)
 		sret_tmp, _, header= curl(url, tmp_path)
 		if sret_tmp == 0 and non_file_check(tmp_path, header) then
 			sret_tmp = 1
-			log(geo_type .. " 下载文件过程出错，Please check the network or download link and try again！")
+			log(geo_type .. " An error occurred while downloading the file，Please check the network or download link and try again！")
 		end
 	end
 	if sret_tmp == 0 then
@@ -731,7 +731,7 @@ if geo2rule == "1" then
 
 	if geoip_update_ok then
 		if fs.access(asset_location .. "geoip.dat") then
-			safe_call(fetch_chnroute, "生成chnrouteAn error occurred...")
+			safe_call(fetch_chnroute, "generatechnrouteAn error occurred...")
 			safe_call(fetch_chnroute6, "generatechnroute6An error occurred...")
 		else
 			log("geoip.dat File does not exist,Skip rule generation。")

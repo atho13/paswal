@@ -132,7 +132,7 @@ for k, e in ipairs(api.get_valid_nodes()) do
 	end
 end
 
--- Get the current server of each dynamic configuration，可以用 get and set， getIt is necessary to obtain the node table
+-- Get the current server of each dynamic configuration，available get and set， getIt is necessary to obtain the node table
 local CONFIG = {}
 do
 	local function import_config(protocol)
@@ -236,7 +236,7 @@ do
 					end
 				end,
 				delete = function(o)
-					-- If currently lbss Value is not ip:port Format，才进行删除
+					-- If currently lbss Value is not ip:port Format，Just delete
 					if not is_ip_port(t[option]) then
 						uci:delete(appname, t[".name"])
 					end
@@ -358,7 +358,7 @@ do
 				}
 			end
 		elseif node.protocol and node.protocol == '_urltest' then
-			local flag = "Sing-Box URLTestnode[" .. node_id .. "]列表"
+			local flag = "Sing-Box URLTestnode[" .. node_id .. "]list"
 			local currentNodes = {}
 			local newNodes = {}
 			if node.urltest_node then
@@ -782,7 +782,7 @@ local function processData(szType, content, add_mode, group, sub_cfg)
 				password = hostInfo[1]  --Some links use clear textuuidMake a password
 			end
 
-			-- Determine whether the password has been passedurl编码
+			-- Determine whether the password has been passedurlcoding
 			local function isURLEncodedPassword(pwd)
 				if not pwd:find("%%[0-9A-Fa-f][0-9A-Fa-f]") then
 					return false
@@ -1015,7 +1015,7 @@ local function processData(szType, content, add_mode, group, sub_cfg)
 			result.type = 'Xray'
 			result.protocol = 'trojan'
 		else
-			log("jump over Trojan node，因未适配到 Trojan core program，or the node usage type is not set correctly。")
+			log("jump over Trojan node，Not adapted to Trojan core program，or the node usage type is not set correctly。")
 			return nil
 		end
 		
@@ -1155,7 +1155,7 @@ local function processData(szType, content, add_mode, group, sub_cfg)
 			result.finalmask = (params.fm and params.fm ~= "") and api.base64Encode(params.fm) or nil
 
 			if result.type == "sing-box" and (result.transport == "mkcp" or result.transport == "xhttp") then
-				log("skip node：" .. result.remarks .."，because Sing-Box Not supported " .. szType .. " agreed " .. result.transport .. " 传输方式，Need to be replaced Xray。")
+				log("skip node：" .. result.remarks .."，because Sing-Box Not supported " .. szType .. " agreed " .. result.transport .. " Transmission method，Need to be replaced Xray。")
 				return nil
 			end
 		end
@@ -1348,7 +1348,7 @@ local function processData(szType, content, add_mode, group, sub_cfg)
 			result.type = 'sing-box'
 			result.protocol = "hysteria"
 		else
-			log("跳过 Hysteria node，Not installed Hysteria core program Sing-box。")
+			log("jump over Hysteria node，Not installed Hysteria core program Sing-box。")
 			return nil
 		end
 
@@ -1461,7 +1461,7 @@ local function processData(szType, content, add_mode, group, sub_cfg)
 			result.type = 'sing-box'
 			result.protocol = "tuic"
 		else
-			log("jump over Tuic node，Not installed Tuic 核心程序 Sing-box。")
+			log("jump over Tuic node，Not installed Tuic core program Sing-box。")
 			return nil
 		end
 
