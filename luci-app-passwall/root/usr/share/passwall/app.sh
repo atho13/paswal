@@ -32,7 +32,7 @@ check_run_environment() {
 		if [ "$dnsmasq_nftset" -eq 1 ] && [ "$has_fw4" -eq 1 ]; then
 			USE_TABLES="nftables"
 		elif [ "$has_ipset" -eq 1 ] && [ "$has_ipt" -eq 1 ] && [ "$dnsmasq_ipset" -eq 1 ]; then
-			echolog "warn：nftables (fw4) The application environment is incomplete，切换至 iptables。(has_fw4:$has_fw4/dnsmasq_nftset:$dnsmasq_nftset)"
+			echolog "warn：nftables (fw4) The application environment is incomplete，switch to iptables。(has_fw4:$has_fw4/dnsmasq_nftset:$dnsmasq_nftset)"
 			USE_TABLES="iptables"
 		fi
 	else
