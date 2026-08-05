@@ -8,7 +8,7 @@ m = Map(appname)
 api.set_apply_on_parse(m)
 
 -- [[ App Settings ]]--
-s = m:section(TypedSection, "global_app", translate("App Update"))
+s = m:section(TypedSection, "global_app", translate(""))
 s.anonymous = true
 
 local app_version = Template(appname .. "/app_update/app_version")

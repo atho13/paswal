@@ -3,7 +3,7 @@ local appname = api.appname
 
 api.set_default_cbi()
 
-m = Map("passwall_server", translate("Server-Side"))
+m = Map("passwall_server", translate(""))
 api.set_apply_on_parse(m)
 
 t = m:section(NamedSection, "global", "global")

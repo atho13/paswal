@@ -9,7 +9,7 @@ m = Map(appname)
 api.set_apply_on_parse(m)
 
 -- [[ Rule Settings ]]--
-s = m:section(TypedSection, "global_rules", translate("Rule status"))
+s = m:section(TypedSection, "global_rules", translate(""))
 s.anonymous = true
 
 --[[
@@ -149,7 +149,7 @@ s:append(Template(appname .. "/rule/rule_version"))
 local cfgname = "shunt_rules"
 
 if has_xray or has_singbox then
-	s = m:section(TypedSection, cfgname, "Sing-Box/Xray " .. translate("Shunt Rule"), "<a style='color: red'>" .. translate("Please note attention to the priority, the higher the order, the higher the priority.") .. "</a>")
+	s = m:section(TypedSection, cfgname, "" .. translate("Shunt Rule"), "<a style='color: red'>" .. translate("Please note attention to the priority, the higher the order, the higher the priority.") .. "</a>")
 	s.template = "cbi/tblsection"
 	s.anonymous = false
 	s.addremove = true
