@@ -229,7 +229,7 @@ do
 				remarks = "HAProxyLoad balancing node list[" .. i .. "]",
 				currentNode = node_id and uci:get_all(appname, node_id) or nil,
 				set = function(o, server)
-					-- 如果当前 lbss Value is not ip:port Format，Just make changes
+					-- If currently lbss Value is not ip:port Format，Just make changes
 					if not is_ip_port(t[option]) then
 						uci:set(appname, t[".name"], option, server)
 						o.newNodeId = server
@@ -1786,7 +1786,7 @@ local function select_node(nodes, config, parentConfig)
 					if node.type and node.address and node.port then
 						if node.type == config.currentNode.type and (node.address .. ':' .. node.port == config.currentNode.address .. ':' .. config.currentNode.port) and node.group == config.currentNode.group then
 							if config.log == nil or config.log == true then
-								log('更新【' .. config.remarks .. '】second matching node：' .. node.remarks)
+								log('renew【' .. config.remarks .. '】second matching node：' .. node.remarks)
 							end
 							server = node[".name"]
 							break

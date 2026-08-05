@@ -440,7 +440,7 @@ if USE_PROXY_LIST == "1" and not fs.access(file_proxy_host) then
 	end
 	if USE_GEOVIEW == "1" and geosite_arg ~= "" and api.is_finded("geoview") then
 		if get_geosite(geosite_arg, file_proxy_host) == 0 then
-			log("  * 解析[proxy list] Geosite To the proxy domain name table(blacklist)Finish")
+			log("  * parse[proxy list] Geosite To the proxy domain name table(blacklist)Finish")
 		else
 			log("  * parse[proxy list] Geosite To the proxy domain name table(blacklist)fail！")
 		end

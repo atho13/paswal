@@ -57,7 +57,7 @@ check_run_environment() {
 			nftflag=1
 			local v_num=$(echo "$dnsmasq_ver" | tr -cd '0-9')
 			if [ "${v_num:-0}" -lt 292 ]; then
-				echolog "hint：Dnsmasq ($dnsmasq_ver) lower than 2.92，建议升级以增强稳定性。"
+				echolog "hint：Dnsmasq ($dnsmasq_ver) lower than 2.92，Recommended to upgrade to enhance stability。"
 			fi
 		fi
 		local pkg

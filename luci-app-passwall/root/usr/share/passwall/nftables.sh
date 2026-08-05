@@ -725,7 +725,7 @@ load_acl() {
 					[ "${USE_PROXY_LIST}" = "1" ] && nft_rule_dual "PSW_ICMP_REDIRECT" "ip protocol icmp ip daddr" "$NFTSET_BLACK" "$(REDIRECT) comment \"default\""
 					[ "${USE_GFW_LIST}" = "1" ] && nft "add rule $NFTABLE_NAME PSW_ICMP_REDIRECT ip protocol icmp ip daddr @$NFTSET_GFW $(REDIRECT) comment \"default\""
 					[ "${CHN_LIST}" != "0" ] && nft_rule_dual "PSW_ICMP_REDIRECT" "ip protocol icmp ip daddr" "$NFTSET_CHN" "$(get_jump_nft ${CHN_LIST}) comment \"default\""
-					[ "${USE_SHUNT_TCP}" = "1" ] && nft_rule_dual "PSW_ICMP_REDIRECT" "ip protocol icmp ip daddr" "$NFTSET_SHUNT" "$(REDIRECT) comment \"默认\""
+					[ "${USE_SHUNT_TCP}" = "1" ] && nft_rule_dual "PSW_ICMP_REDIRECT" "ip protocol icmp ip daddr" "$NFTSET_SHUNT" "$(REDIRECT) comment \"default\""
 					[ "${TCP_PROXY_MODE}" != "disable" ] && nft "add rule $NFTABLE_NAME PSW_ICMP_REDIRECT ip protocol icmp $(REDIRECT) comment \"default\""
 					nft "add rule $NFTABLE_NAME PSW_ICMP_REDIRECT ip protocol icmp return comment \"default\""
 				}
@@ -1331,7 +1331,7 @@ add_firewall_rule() {
 				else
 					nft "get element $NFTABLE_NAME $NFTSET_LAN6 {${2}}" &>/dev/null
 					[ $? -eq 0 ] && {
-						echolog "  - 上游 DNS server ${2} Already on the list for direct access，Not forced to TCP Proxy forwards to this server TCP/${3} Port access"
+						echolog "  - upstream DNS server ${2} Already on the list for direct access，Not forced to TCP Proxy forwards to this server TCP/${3} Port access"
 						return 0
 					}
 					nft "insert rule $NFTABLE_NAME PSW_OUTPUT_MANGLE_V6 meta l4proto tcp ip6 daddr ${2} tcp dport ${3} counter jump PSW_RULE"

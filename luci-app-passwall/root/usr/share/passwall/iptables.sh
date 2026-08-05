@@ -943,7 +943,7 @@ add_firewall_rule() {
 			if [ -n "$GEOIP_CODE" ]; then
 				get_geoip $GEOIP_CODE ipv4 | grep -E "(\.((2(5[0-5]|[0-4][0-9]))|[0-1]?[0-9]{1,2})){3}" | sed -e "s/^/add $IPSET_BLOCK &/g" -e "s/$/ timeout 0/g" | ipset -! -R
 				get_geoip $GEOIP_CODE ipv6 | grep -E "([A-Fa-f0-9]{1,4}::?){1,7}[A-Fa-f0-9]{1,4}" | sed -e "s/^/add $IPSET_BLOCK6 &/g" -e "s/$/ timeout 0/g" | ipset -! -R
-				echolog "  - [$?]parse and join[屏蔽列表] GeoIP arrive IPSET Finish"
+				echolog "  - [$?]parse and join[Block list] GeoIP arrive IPSET Finish"
 			fi
 		}
 	}
@@ -1353,7 +1353,7 @@ add_firewall_rule() {
 					[ "${LOCALHOST_UDP_PROXY_MODE}" != "disable" ] && add_port_rules "$ip6t_m -A PSW_OUTPUT -p udp" $UDP_REDIR_PORTS "-j PSW_RULE"
 					$ip6t_m -A PSW $(comment "local machine") -p udp -i lo $(REDIRECT $UDP_REDIR_PORT TPROXY)
 				}
-				$ip6t_m -A PSW $(comment "本机") -p udp -i lo -j RETURN
+				$ip6t_m -A PSW $(comment "local machine") -p udp -i lo -j RETURN
 				insert_rule_before "$ip6t_m" "OUTPUT" "mwan3" "$(comment mangle-OUTPUT-PSW) -p udp -j PSW_OUTPUT"
 			}
 		fi
